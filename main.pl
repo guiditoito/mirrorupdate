@@ -23,6 +23,7 @@ use strict;
 use warnings;
 use File::Rsync;
 use POSIX qw(strftime);
+use Fcntl qw(:flock SEEK_END);
 
 #Here you can edir rsync sources. Those are Canonical's
 #my $repoarc = 'rsync://archive.ubuntu.com/ubuntu/';
@@ -57,8 +58,7 @@ my %opts = archrel1($type);
 my $rsynco1 = File::Rsync->new( \%opts  );
 
 #Lock for no interlapping
-open(my $fh, ">>$flocker") or die "Couldn't open lock file $!";
-flock($fh, 2) or die "Couldn't lock file $!";
+flock( $0, LOCK_EX|LOCK_NB) or die "Couldn't establish immediate lock: $!";
 
 #A warning here. Must use ignore-errors or rsync will die with no recursivity.
 $rsynco1->exec( { src => $dsrc , dest => $directory } ) or warn "Rsync failed\n" ;
@@ -73,8 +73,7 @@ foreach my $logout1 (@logout1) {
 my $rsynco2 = File::Rsync->new( \%opts  );
 $rsynco2->exec( { src => $dsrc , dest => $directory } ) or warn "Rsync failed\n" ;
 
-#Then unlock
-close($fh);
+
 my @logout2 = $rsynco2->out;
 foreach my $logout2 (@logout2) {
 	logcorto($logout2,$type);
