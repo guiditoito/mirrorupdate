@@ -33,11 +33,11 @@ my $reporel = 'rsync://rsync.releases.ubuntu.com/ubuntu-releases/';
 my $flocker = "/var/lock/repoupdate";
 
 my ($type,$directory) = @ARGV;
-#$directory or die "Usage: repoupdate -a/-r DIR \n where -a does Ubuntu Archive update and -r does Ubuntu Releases update\n"; 
-#$type or die "Uso: repoupdate -a/-r DIR \n where -a does Ubuntu Archive update and -r does Ubuntu Releases update\n"; 
+$directory or die "Usage: repoupdate -a/-r DIR \n where -a does Ubuntu Archive update and -r does Ubuntu Releases update\n"; 
+$type or die "Uso: repoupdate -a/-r DIR \n where -a does Ubuntu Archive update and -r does Ubuntu Releases update\n"; 
 
-$directory = "/var/ubuntu/";
-$type = "-a";
+#$directory = "/var/ubuntu/";
+#$type = "-a";
 
 dirchk($directory);
 
